@@ -1,7 +1,10 @@
 package ru.netology;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class Main {
     private static final int MAX_NUMBER_OF_LETTERS_IN_WORD = 20;
@@ -9,20 +12,24 @@ public class Main {
 
     public static void main(String[] args) {
 
-        String message = getPhrase(1000);
-        System.out.println(message);
-        printSortedWords(message);
-    }
-
-    private static void printSortedWords(String message) {
-        Arrays.stream(message
+        Function<String, List<String>> getWords = phrase ->
+                Arrays.stream(phrase
                 .toLowerCase()
                 .trim()
                 .replace("^", "")
                 .replaceAll("[^a-z^A-Z^ ]", "")
                 .split(" "))
                 .sorted()
+                .collect(Collectors.toList());
+
+        String phrase = getPhrase(1000);
+        System.out.println(phrase);
+
+        List<String> words = getWords.apply(phrase);
+
+        words.stream()
                 .forEach(System.out::println);
+
     }
 
     private static String getPhrase(int count){
@@ -39,6 +46,4 @@ public class Main {
         }
         return sb.toString();
     }
-
-
 }
